@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <istream>
-#include <bits/stdc++.h>
 using namespace std;
 
 typedef vector<int> sequence;
