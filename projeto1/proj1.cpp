@@ -3,7 +3,6 @@
 #include <map>
 using namespace std;
 
-
 int problema1();
 void problema2();
 
