@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <iterator>
 using namespace std;
+
 
 int problema1();
 void problema2();
@@ -36,29 +37,34 @@ int problema1(){
         return 0;
     }
     vector<int> comps(size_s);
-    // meter todas as entradas do vetor a 1
-    for(i = 0; i < size_s; i++)
-        comps[i] = 1;
-    map<int, int> quant;
-    quant[1] = 1;    
+    vector<int> numbersubs(size_s,1);
+    comps[0] = 1;    
     for(i=1 ; i < size_s; i++){
+        //ir metendo a entrada do vetor comp a 1
+        comps[i] = 1;
         for(j = 0; j < i; j++){
             if(s[j] < s[i]){
-                if(comps[i] < comps[j] + 1)
+                if(comps[i] < comps[j] + 1){
                     comps[i] = comps[j] + 1; 
+                    numbersubs[i] = numbersubs[j];
+                }
+                // caso em que existe masi uma subsequencia
+                else if(comps[i] == comps[j] + 1)
+                    numbersubs[i] += numbersubs[j];
             }
         }
-        //verifica se o tamanho ja existe no mapa de quantidade de tamanhos
-        if (quant.find(comps[i]) == quant.end())
-            quant[comps[i]] = 1;
-        else
-            quant[comps[i]]++;
     }
-    int lenght = 0, num_subs = 1;
-    for(auto const &x : quant){
-        num_subs *= x.second;
-        if (x.first > lenght)
-            lenght = x.first;
+    int lenght = 0;
+    //descobrir o comprimento maximo
+    for(i = 0; i < size_s; i++){
+        if(comps[i] > lenght)
+            lenght = comps[i];
+    }
+    int num_subs = 0;
+    //descobrir o numero de subsequencias
+    for(i = 0; i < size_s; i++){
+        if(comps[i] == lenght)
+            num_subs += numbersubs[i];
     }
     cout << lenght << " " << num_subs << endl;
     return 0;
@@ -82,5 +88,6 @@ void problema2(){
         }
     }
     //algoritmo
+    cout << 1 << endl;
     
 }
