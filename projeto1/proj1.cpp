@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <iterator>
+#include <map>
 using namespace std;
 
 
@@ -88,6 +88,34 @@ void problema2(){
         }
     }
     //algoritmo
-    cout << 1 << endl;
-    
+    int size_x = x.size(), size_y = y.size();
+    int matrix[size_x+1][size_y+1];
+    //meter a coluna 0 a 0's
+    for(int i=0; i <= size_x; i++)
+        matrix[i][0] = 0;
+    //meter a linha 0 a 0's
+    for(int i=0; i <= size_y; i++)
+        matrix[0][i] = 0;
+    //preencher a matriz com o algoritmo
+    //map<int,int> comp_val;
+    for(int i=1; i <= size_x; i++){
+        for(int j=1; j <= size_y; j++){
+            if(x[i-1] == y[j-1]){
+                //if(ve no mapa que ha menor)
+                    matrix[i][j] = matrix[i-1][j-1] + 1;
+                    //guarda no mapa
+                //else ??
+                    //matrix[i][j] = matrix[i-1][j-1];
+            }
+            else
+                matrix[i][j] = max(matrix[i][j-1], matrix[i-1][j]);
+            }
+        }
+        /*for(int i = 0; i<=size_x; i++){
+            for(int j = 0; j<=size_y; j++){
+                cout << matrix[i][j] << " ";
+            }
+            cout << endl;
+        }*/
+    cout << matrix[size_x][size_y] << endl;
 }
