@@ -1,11 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <algorithm>
 using namespace std;
 
 
 int problema1();
-void problema2();
+int problema2();
+int find_smaller_map(map<int, vector<int> > comp_val, int comp, int value);
 
 int main(){
     int nprob;
@@ -70,7 +72,7 @@ int problema1(){
     return 0;
 }
 
-void problema2(){
+int problema2(){
     vector<int> x(0);
     vector<int> y(0);
     int i;
@@ -89,33 +91,58 @@ void problema2(){
     }
     //algoritmo
     int size_x = x.size(), size_y = y.size();
-    int matrix[size_x+1][size_y+1];
-    //meter a coluna 0 a 0's
-    for(int i=0; i <= size_x; i++)
-        matrix[i][0] = 0;
-    //meter a linha 0 a 0's
-    for(int i=0; i <= size_y; i++)
-        matrix[0][i] = 0;
+    vector<vector<int>> matrix;
+
+    //coluna 0 a 0's
+    for(int i=0; i <= size_x; i++){
+        matrix.push_back(vector<int>());
+        matrix[i].push_back(0);    
+    }
+
+    //linha 0 a 0's
+    for(i=0;i<=size_y;i++){
+        matrix[0].push_back(0);
+    }
+
+    map<int, vector<int> > comp_val;
+    comp_val[0].push_back(0);
+
     //preencher a matriz com o algoritmo
-    //map<int,int> comp_val;
     for(int i=1; i <= size_x; i++){
         for(int j=1; j <= size_y; j++){
             if(x[i-1] == y[j-1]){
-                //if(ve no mapa que ha menor)
-                    matrix[i][j] = matrix[i-1][j-1] + 1;
-                    //guarda no mapa
-                //else ??
-                    //matrix[i][j] = matrix[i-1][j-1];
+                if(find_smaller_map(comp_val,matrix[i-1][j-1],x[i-1]) == 1){
+                    matrix[i].push_back(matrix[i-1][j-1] + 1);
+                    //meter no mapa com key = comp, o numero
+                    comp_val[matrix[i][j]].push_back(x[i-1]);
+                }
+                else
+                    matrix[i].push_back(matrix[i-1][j-1]);
             }
             else
-                matrix[i][j] = max(matrix[i][j-1], matrix[i-1][j]);
-            }
+                matrix[i].push_back(max(matrix[i][j-1], matrix[i-1][j]));
         }
-        /*for(int i = 0; i<=size_x; i++){
-            for(int j = 0; j<=size_y; j++){
-                cout << matrix[i][j] << " ";
-            }
-            cout << endl;
-        }*/
+    }
+
+    /*for(int i = 0; i<=size_x; i++){
+        for(int j = 0; j<=size_y; j++){
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }*/
+
     cout << matrix[size_x][size_y] << endl;
+
+    return 0;
+}
+
+int find_smaller_map(map<int, vector<int> > comp_val, int comp, int value){
+    //se existe no map vamos ver se ha valor menor
+    if (comp_val.count(comp) == 1){
+        int i = *min_element(comp_val[comp].begin(), comp_val[comp].end());
+        if(i < value)
+            return 1;
+        else return 0;
+    }
+    return 1;
 }
