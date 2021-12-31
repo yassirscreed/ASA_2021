@@ -2,13 +2,13 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <unordered_map>
 using namespace std;
 
 
 int problema1();
 int problema2();
 int find_smaller_map(map<int, vector<int> > comp_val, int comp, int value);
-int binarySearch(vector<int> aux, int low, int high, int key);
 
 int main(){
     int nprob;
@@ -75,23 +75,25 @@ int problema1(){
 
 int problema2(){
     vector<int> x(0);
-    vector<int> aux(0);
     vector<int> y(0);
+    unordered_map<int,int> aux;
     int i;
+
     //ler o input 
+
     while(cin >> i){
+        aux[i] = 1;
         x.push_back(i);
-        aux.push_back(i);
         if (cin.get() == '\n'){
             break;
         }
     }
-    sort(aux.begin(), aux.end());
-    
-    while(cin >> i){
-        if(binarySearch(aux,0,aux.size(),i) != -1)
-            y.push_back(i);
 
+    while(cin >> i){
+        int flag = 0;
+        if(aux.find(i) == aux.end()) flag =1;
+        if (flag == 0)
+            y.push_back(i);
         if (cin.get() == '\n'){
             break;
         }
@@ -99,9 +101,7 @@ int problema2(){
 
     //algoritmo
     int size_x = x.size(), size_y = y.size();
-    for(i=0; i< size_y; i++){
-        cout << y[i]<<endl; 
-    }
+
     vector<vector<int>> matrix;
 
     //coluna 0 a 0's
@@ -156,17 +156,4 @@ int find_smaller_map(map<int, vector<int> > comp_val, int comp, int value){
         else return 0;
     }
     return 1;
-}
-
-
-int binarySearch(vector<int> aux , int low, int high, int key)
-{
-    if (high < low)
-        return -1;
-    int mid = (low + high) / 2; 
-    if (key == aux[mid])
-        return mid;
-    if (key > aux[mid])
-        return binarySearch(aux, (mid + 1), high, key);
-    return binarySearch(aux, low, (mid - 1), key);
 }
